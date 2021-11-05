@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import ContextTasks from '../context/ContextTasks';
+
 
 function ToDo() {
+  const { tasks } = useContext(ContextTasks);
   return (
     <div>
-      
+      {tasks}
     </div>
   );
 }

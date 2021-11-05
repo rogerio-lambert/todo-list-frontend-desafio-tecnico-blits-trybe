@@ -11,27 +11,23 @@ function ProviderTasks({ children }) {
   const urlBase = 'http://localhost:3000';
 
   const getAllTasks = async () => {
-    const fetchConfig = {
-      method: 'GET',
-      header: {
-        authorication: token,
-      },
-    };
-    console.log(urlBase);
-    loaldTasks(
-      fetch(`${urlBase}/tasks`, fetchConfig)
-        .then((response) => response.json())
-        .catch((error) => console.log(error))
-    );
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': token,
+    }
+    console.log(headers);
+    const { data } = await axios.get(`${urlBase}/tasks`, { headers })
+    console.log(data);
+    loaldTasks(data.tasks);
   };
 
   const makeLogin = async (email, password) => {
     setAllowed(true);
-    const { token: newToken, user: newUser, error } = await axios
+    const { data: { token: newToken, user: newUser, error } }= await axios
       .post('http://localhost:3000/users/login', { email, password })
         .catch((er) => console.log(er));
     console.log(newToken, newUser, error);
-    if (!error) {
+    if (error !== undefined) {
       console.log(error);
       return setAllowed(false);
     }

@@ -1,9 +1,9 @@
 import React, { useState, useContext } from 'react';
 import ContextTasks from '../context/ContextTasks';
-import { createBrowserHistory } from 'history';
+import { useHistory } from 'react-router-dom';
 function SignUp() {
   const { createUser } = useContext(ContextTasks);
-  const history = createBrowserHistory();
+  const history = useHistory();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
