@@ -1,9 +1,10 @@
 import React, { useContext, useState, useEffect } from 'react';
 import ContextTasks from '../context/ContextTasks';
+import Task from '../components/Task';
 
 
 function ToDo() {
-  const { tasks, user, updateSortKey, createTask, getAllTasks, deleteTask } = useContext(ContextTasks);
+  const { tasks, user, updateSortKey, createTask, getAllTasks } = useContext(ContextTasks);
   const [newTask, setNewTask] = useState('');
   const columnTitle = [ 'Tarefa', 'Data de criação', 'Status' ];
 
@@ -39,18 +40,7 @@ function ToDo() {
 
         <tbody>
           {tasks.map((task, index) => (
-            <tr key={ index }>
-              <td>{task.content}</td>
-              <td>{task.timeStamp}</td>
-              <td>{task.status}</td>
-              <td>
-                <button
-                  onClick={async () => await deleteTask(task.id)}
-                >
-                  x
-                </button>
-              </td>
-            </tr>
+            <Task task={task} key={index} />
           ))}
         </tbody>
       </table>
