@@ -3,7 +3,7 @@ import ContextTasks from '../context/ContextTasks';
 
 
 function ToDo() {
-  const { tasks, user, updateSortKey, createTask, getAllTasks } = useContext(ContextTasks);
+  const { tasks, user, updateSortKey, createTask, getAllTasks, deleteTask } = useContext(ContextTasks);
   const [newTask, setNewTask] = useState('');
   const columnTitle = [ 'Tarefa', 'Data de criação', 'Status' ];
 
@@ -43,6 +43,13 @@ function ToDo() {
               <td>{task.content}</td>
               <td>{task.timeStamp}</td>
               <td>{task.status}</td>
+              <td>
+                <button
+                  onClick={async () => await deleteTask(task.id)}
+                >
+                  x
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>

@@ -49,6 +49,21 @@ function ProviderTasks({ children }) {
     loaldTasks([...tasks, data.task]);
   };
 
+  const deleteTask = async (taskId) => {
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': token,
+    };
+    await axios.delete(`${urlBase}/tasks/${taskId}`, { headers });
+  };
+
+  const updateTask = async (taskId, content, status) => {
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': token,
+    };
+    await axios.put(`${urlBase}/tasks/${taskId}`, { content, status }, { headers });
+  };
 
   return (
     <ContextTasks.Provider
@@ -56,6 +71,8 @@ function ProviderTasks({ children }) {
         tasks,
         getAllTasks,
         createTask,
+        deleteTask,
+        updateTask,
         user,
         createUser,
         makeLogin,
