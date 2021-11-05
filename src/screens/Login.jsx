@@ -1,28 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
-import '../styleSheets/Login.css';
+import React, { useState, useContext } from 'react';
+import ContextTasks from '../context/ContextTasks';
+import { createBrowserHistory } from 'history';
 
 function Login() {
-  const history = useHistory();
+  const { makeLogin, allowed, getAllTasks, user } = useContext(ContextTasks);
+  const history = createBrowserHistory();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [disableButton, setDisableButton] = useState(true);
 
-  // https://www.horadecodar.com.br/2020/09/07/expressao-regular-para-validar-e-mail-javascript-regex/
-  const emailValidation = /\S+@\S+\.\S+/;
-  const emailTest = emailValidation.test(email);
-  const minPasswordLength = 6;
 
-  useEffect(() => {
-    if (emailTest && password.length > minPasswordLength) {
-      setDisableButton(false);
-    } else {
-      setDisableButton(true);
+  const askLogin = async () => {
+    await makeLogin(email, password)
+    if (allowed) {
+      await getAllTasks(user.id);
+      history.push('/todo');
     }
-  }, [password, email, emailTest]);
-
-  const makeLogin = () => {
-    history.push('/todo');
   };
 
   return (
@@ -30,19 +22,18 @@ function Login() {
       <h1
         className="login-title"
       >
-        MyRecipes
+        Login
       </h1>
       <form
         className="form"
         onSubmit={ (e) => {
           e.preventDefault();
-          makeLogin();
+          askLogin();
         } }
       >
         <input
           className="input-login"
           type="email"
-          data-testid="email-input"
           value={ email }
           onChange={ (e) => setEmail(e.target.value) }
           placeholder="Digite seu e-mail"
@@ -53,7 +44,6 @@ function Login() {
           type="password"
           value={ password }
           onChange={ (e) => setPassword(e.target.value) }
-          data-testid="password-input"
           placeholder="Digite sua senha"
           minLength="7"
           required
@@ -61,12 +51,12 @@ function Login() {
         <button
           className="loginBtn"
           type="submit"
-          data-testid="login-submit-btn"
-          disabled={ disableButton }
         >
           Entrar
         </button>
       </form>
+      { !allowed && <span>Informações do email ou senha estão erradas</span> }
+      <a href="/register">Cadastre um novo usuário</a>
     </div>
   );
 }
