@@ -15,18 +15,15 @@ function ProviderTasks({ children }) {
       'Content-Type': 'application/json',
       'Authorization': token,
     }
-    console.log(headers);
     const { data } = await axios.get(`${urlBase}/tasks`, { headers })
-    console.log(data);
     loaldTasks(data.tasks);
   };
 
   const makeLogin = async (email, password) => {
     setAllowed(true);
     const { data: { token: newToken, user: newUser, error } }= await axios
-      .post('http://localhost:3000/users/login', { email, password })
+      .post(`${urlBase}/users/login`, { email, password })
         .catch((er) => console.log(er));
-    console.log(newToken, newUser, error);
     if (error !== undefined) {
       console.log(error);
       return setAllowed(false);
@@ -37,18 +34,19 @@ function ProviderTasks({ children }) {
 
   const createUser = async (name, email, password) => {
     console.log(name, email, password);
-    await axios.post('http://localhost:3000/users/register', {
+    await axios.post(`${urlBase}/users/register`, {
       name, email, password,
-    }
+    })
+  };
 
-    )
-    // const fetchConfig = {
-    //   method: 'POST',
-    //   body: { name, email, password },
-    // };
-    // await fetch(`http://localhost:3000/users/register`, fetchConfig)
-    //     .then((response) => response.json())
-    //     .catch((error) => console.log(error));
+  const createTask = async (content) => {
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': token,
+    }
+    const body = { content };
+    const { data } = await axios.post(`${urlBase}/tasks`, body, { headers })
+    loaldTasks([...tasks, data.task]);
   };
 
 
@@ -57,6 +55,7 @@ function ProviderTasks({ children }) {
       value={ {
         tasks,
         getAllTasks,
+        createTask,
         user,
         createUser,
         makeLogin,
