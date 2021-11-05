@@ -1,10 +1,10 @@
 import React, { useState, useContext } from 'react';
 import ContextTasks from '../context/ContextTasks';
-import { createBrowserHistory } from 'history';
+import { useHistory } from 'react-router-dom';
 
 function Login() {
   const { makeLogin, allowed, getAllTasks, user } = useContext(ContextTasks);
-  const history = createBrowserHistory();
+  const history = useHistory();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
